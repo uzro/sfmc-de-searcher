@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>DE Util</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <main>
+            <div>
+                <button id="refreshde" class="btn-default">
+                    Refresh DE List
+                </button>
+            </div>
+            <div id="content">
+                <div class="input-box">
+                    <label for="dename" class="input-label">DE Name</label>
+                    <input type="text" id="dename" class="sim-input input-data">
+                    <button id="desubmit" class="btn-primary"
+                        style="width:100px; margin-left: 10px;">
+                        Search DE
+                    </button>
+                </div>
+
+                <div id="output" class="alert"></div>
+
+                <div id="de-panel" class="de-panel"></div>
+
+                <div style="padding: 0 10px; margin-bottom: 20px;">
+                    <div class="tag"
+                        style="background-color: rgb(45, 183, 245);" id="denum">
+                        0
+                    </div>
+                    <div class="tag"
+                        style="background-color: rgb(135, 208, 104);"
+                        id="detime">
+                        1900/01/01
+                    </div>
+                </div>
+
+            </div>
+            <script src="popup.js"></script>
+        </main>
+    </body>
+
+</html>

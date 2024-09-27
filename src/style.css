@@ -1,0 +1,202 @@
+body {
+    width: 600px;
+    min-height: 200px;
+    max-height: 450px;
+    background-color: #f3f3f3;
+    color: #333;
+    font-size: 1.5em;
+    /* padding: 0 20px; */
+}
+
+a {
+    color: #1677ff;
+    ;
+    text-decoration: none;
+    font-size: 16px;
+    height: 32px;
+    padding-left: 10px;
+}
+
+a:hover,
+a:active {
+    color: #69b1ff;
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+button {
+    outline: none;
+    position: relative;
+    display: inline-block;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    background-image: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all .2s cubic-bezier(.645, .045, .355, 1);
+    user-select: none;
+    touch-action: manipulation;
+    line-height: 1.5714285714285714;
+    color: rgba(0, 0, 0, .88);
+    font-size: 14px;
+    height: 32px;
+    padding: 4px 15px;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1677ff;
+    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #4096ff;
+}
+
+.btn-default {
+    background-color: #fff;
+    border-color: #d9d9d9;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .02);
+}
+
+.btn-default:hover {
+    color: #4096ff;
+    border-color: #4096ff;
+}
+
+.sim-input {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 4px 11px;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    list-style: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-width: 0;
+    background-color: #ffffff;
+    background-image: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.sim-input:hover,
+.sim-input:focus {
+    border-color: #4096ff;
+    border-inline-end-width: 1px;
+}
+
+input {
+    border: none;
+}
+
+input:hover,
+input:focus {
+    outline: none;
+}
+
+label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    height: 32px;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    padding: 2px 3px;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 5px;
+}
+
+.input-label {
+    width: 100px;
+}
+
+.tag {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+    list-style: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    display: inline-block;
+    height: auto;
+    margin-inline-end: 8px;
+    padding-inline: 7px;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    opacity: 1;
+    transition: all 0.2s;
+    text-align: start;
+}
+
+.alert {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 8px 12px;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    list-style: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    position: relative;
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+    border-radius: 8px;
+}
+
+
+.de-panel {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.match-list {
+    display: flex;
+    flex-direction: column; /* or row */
+    gap: 5px; /* space between items */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.match-item {
+    display: flex;
+    justify-content: space-between; /* or other alignment */
+    align-items: center;
+    padding: 3px;
+    border: 1px solid #ccc; /* optional styling */
+    border-radius: 4px; /* optional styling */
+    font-size: 14px;
+}
+
+.not-found-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    font-size: 20px;
+    color: red;
+}
