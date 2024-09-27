@@ -1,0 +1,32 @@
+{
+   "action": {
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [
+      {
+         "js": [
+            "popup.js"
+         ],
+         "matches": [
+            "https://*.exacttarget.com/",
+            "https://*.marketingcloudapps.com/*",
+            "https://*.exacttargetapis.com/*",
+            "https://*.marketingcloudapis.com/*"
+         ]
+      }
+   ],
+   "description": "A smart DE Util.",
+   "icons": {
+      "128": "de.png",
+      "16": "de.png",
+      "48": "de.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvajZRAHe6XWt4ikN36Xt2/jqEkd76VT/NaTSOeH9NbRBMDZuEm/t4nBFDlr8AVVZEIY8lshJOXXy6ujUCk/XgJp48cIYHP267YjdvcRS2dRrwNhjCvvdACE3xRnYKT3gIDLCTQgBKWwXCLM8LMWlCXWnJbTQyUl8Oj5ZaaVhLIvIpnTexXwbYI9MkklYfKOEdNp+Lrhjob1dJ3pzmR/wVqqhGOM2j00yf7wJfwxdJA7rtOeJBZEm7xiN6EdqsA2cg7IY4ys71e53XH9pSNx2K43u2rQm+6nx+B2GBZGIUqjUkMWpZ4T8tWDDSYOyY7M0i+0E2UkNDLYPEPrQgJSwIwIDAQAB",
+   "manifest_version": 3,
+   "name": "SFMC DE Seacher",
+   "permissions": [
+      "activeTab"
+   ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0.0"
+}
