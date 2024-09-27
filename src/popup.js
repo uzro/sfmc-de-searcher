@@ -8,15 +8,21 @@ const denum = document.getElementById('denum');
 const detime = document.getElementById('detime');
 const dePanel = document.getElementById('de-panel');
 
-let MainData = {}
-const MainDataLocal = localStorage.getItem('MainDataObj');
-if (MainDataLocal) {
-    MainData = JSON.parse(MainDataLocal)
-    denum.textContent = `${Object.keys(MainData).length} DE`
 
-    const MainDataObjUpdatetime = localStorage.getItem('MainDataObjUpdatetime');
-    detime.textContent = MainDataObjUpdatetime
-}
+checkLogin()
+
+let MainData = {}
+setTimeout(() => {
+    const MainDataLocal = localStorage.getItem('MainDataObj');
+    if (MainDataLocal) {
+        MainData = JSON.parse(MainDataLocal)
+        denum.textContent = `${Object.keys(MainData).length} DE`
+
+        const MainDataObjUpdatetime = localStorage.getItem('MainDataObjUpdatetime');
+        detime.textContent = MainDataObjUpdatetime
+    }
+}, 1);
+
 
 debutton.addEventListener('click', () => {
     // error 
@@ -34,15 +40,15 @@ debutton.addEventListener('click', () => {
         let urlServer = getServer(urlDomain)
         
 
-        const matchList = document.createElement("ul");
+        const matchList = document.createElement("div");
         matchList.className = "match-list";
         
         let matchCount = 0
         for (let key in MainData) {
 
-            if (matchCount > 10) {
-                const matchItem = document.createElement("li");
-                matchItem.className = "match-item";
+            if (matchCount >= 10) {
+                const matchItem = document.createElement("div");
+                matchItem.className = "over-match-item";
                 matchItem.textContent = "More than 10 matches, please refine your search";
                 matchList.appendChild(matchItem);
                 break;
@@ -51,12 +57,12 @@ debutton.addEventListener('click', () => {
             if (key.includes(dename.toLowerCase())) {
                 matchCount += 1
                 let res = MainData[key]
-                const matchItem = document.createElement("li");
+                const matchItem = document.createElement("div");
                 matchItem.className = "match-item";
                 const matchLink = document.createElement("a");
                 matchLink.target = "_blank";
                 matchLink.href = `https://mc.${urlServer}.marketingcloudapps.com/contactsmeta/admin.html#admin/data-extension/${res.id}`;
-                matchLink.textContent = `${res.folder}${res.name}`;
+                matchLink.textContent = `${matchCount}. ${res.folder}${res.name}`;
                 matchItem.appendChild(matchLink);
                 matchList.appendChild(matchItem);
             }
@@ -64,7 +70,7 @@ debutton.addEventListener('click', () => {
         
         // match list is empty
         if (matchList.children.length === 0) {
-            const notFoundItem = document.createElement("li");
+            const notFoundItem = document.createElement("div");
             notFoundItem.className = "not-found-item";
             notFoundItem.textContent = "No matches found";
             matchList.appendChild(notFoundItem);
@@ -242,4 +248,41 @@ function getCurrentDateTime() {
     var minutes = now.getMinutes().toString().padStart(2, '0');
 
     return `${year}/${month}/${day} ${hours}:${minutes}`
+}
+
+function checkLogin() {
+
+    
+    function _checkStatus() {
+        return true;
+    }
+
+    chrome.tabs.query({ currentWindow: true }, tabs => {
+        for (let tab of tabs) {
+            const url = tab.url;
+            if (!url || !url.includes) {
+                continue;
+            }
+            console.log(tab)
+            if (url.includes("exacttarget.com") && !url.includes("login")) {
+                console.log("login")
+                return true;
+            }
+        }
+
+        const needLogingDiv = document.createElement("div");
+        needLogingDiv.className = "not-found-item";
+        needLogingDiv.textContent = "Please login to Marketing Cloud first";
+
+        if (!_checkStatus()) {
+            needLogingDiv.textContent = "Login expired, please login again";
+        }
+        content.innerHTML = "";
+        content.appendChild(needLogingDiv);
+
+        button.disabled = true;
+
+        return false;
+    });
+
 }

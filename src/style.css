@@ -1,6 +1,6 @@
 body {
     width: 600px;
-    min-height: 200px;
+    min-height: 150px;
     max-height: 450px;
     background-color: #f3f3f3;
     color: #333;
@@ -69,6 +69,13 @@ button {
 .btn-default:hover {
     color: #4096ff;
     border-color: #4096ff;
+}
+
+.btn-default:disabled {
+    color: #d9d9d9;
+    background-color: #fff;
+    border-color: #d9d9d9;
+    cursor: default;
 }
 
 .sim-input {
@@ -176,7 +183,6 @@ label {
 .match-list {
     display: flex;
     flex-direction: column; /* or row */
-    gap: 5px; /* space between items */
     padding: 0;
     margin: 0;
     list-style: none;
@@ -189,7 +195,13 @@ label {
     padding: 3px;
     border: 1px solid #ccc; /* optional styling */
     border-radius: 4px; /* optional styling */
-    font-size: 14px;
+    margin: 5px;
+}
+
+.match-item a {
+    flex: 1;
+    font-size: 15px;
+    height: auto;
 }
 
 .not-found-item {
@@ -197,6 +209,15 @@ label {
     justify-content: center;
     align-items: center;
     height: 100px;
-    font-size: 20px;
+    font-size: 16px;
     color: red;
+}
+
+.over-match-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    font-size: 16px;
+    color: green;
 }
