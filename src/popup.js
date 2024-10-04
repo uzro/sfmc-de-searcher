@@ -8,7 +8,7 @@ const denum = document.getElementById("denum");
 const detime = document.getElementById("detime");
 const dePanel = document.getElementById("de-panel");
 
-checkLogin();
+// checkLogin();
 
 let MainData = {};
 setTimeout(() => {
@@ -36,37 +36,45 @@ debutton.addEventListener("click", () => {
     const matchList = document.createElement("div");
     matchList.className = "match-list";
 
+    // get matched items by dename max 20
+    const MATCH_LIMIT = 20;
     let matchCount = 0;
+    const matchedItems = [];
     for (let key in MainData) {
-      if (matchCount >= 10) {
-        const matchItem = document.createElement("div");
-        matchItem.className = "over-match-item";
-        matchItem.textContent =
-          "More than 10 matches, please refine your search";
-        matchList.appendChild(matchItem);
-        break;
-      }
-
       if (key.includes(dename.toLowerCase())) {
+        matchedItems.push(MainData[key]);
         matchCount += 1;
-        let res = MainData[key];
-        const matchItem = document.createElement("div");
-        matchItem.className = "match-item";
-        const matchLink = document.createElement("a");
-        matchLink.target = "_blank";
-        matchLink.href = `https://mc.${urlServer}.marketingcloudapps.com/contactsmeta/admin.html#admin/data-extension/${res.id}`;
-        matchLink.textContent = `${matchCount}. ${res.folder}${res.name}`;
-        matchItem.appendChild(matchLink);
-        matchList.appendChild(matchItem);
+        if (matchCount >= MATCH_LIMIT) {
+          break;
+        }
       }
     }
 
-    // match list is empty
-    if (matchList.children.length === 0) {
+    // sort matched items by res.name's length
+    matchedItems.sort((x) => x.name.length);
+
+    for (let i = 0; i < matchedItems.length; i++) {
+      let res = matchedItems[i];
+      const matchItem = document.createElement("div");
+      matchItem.className = "match-item";
+      const matchLink = document.createElement("a");
+      matchLink.target = "_blank";
+      matchLink.href = `https://mc.${urlServer}.marketingcloudapps.com/contactsmeta/admin.html#admin/data-extension/${res.id}`;
+      matchLink.textContent = `${i + 1}. ${res.folder}${res.name}`;
+      matchItem.appendChild(matchLink);
+      matchList.appendChild(matchItem);
+    }
+
+    if (matchedItems.length === 0) {
       const notFoundItem = document.createElement("div");
       notFoundItem.className = "not-found-item";
       notFoundItem.textContent = "No matches found";
       matchList.appendChild(notFoundItem);
+    } else if (matchedItems.length >= MATCH_LIMIT) {
+      const overMatchItem = document.createElement("div");
+      overMatchItem.className = "over-match-item";
+      overMatchItem.textContent = `More than ${MATCH_LIMIT} matches, please refine your search`;
+      matchList.appendChild(overMatchItem);
     }
 
     dePanel.appendChild(matchList);
@@ -101,6 +109,13 @@ button.addEventListener("click", () => {
         console.log(entry_res);
         getDeByFid(root_id, urlServer, "/");
         getChildernByFid(root_id, urlServer, "/");
+      }).catch((error) => {
+        const needLogingDiv = document.createElement("div");
+        needLogingDiv.className = "not-found-item";
+        needLogingDiv.textContent = "Please Check Your Login Status";
+        content.innerHTML = "";
+        content.appendChild(needLogingDiv);
+        console.log("refresh error", error);
       });
   });
 });
