@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 # packaging src to tar.gz with version number
 # get version number from manifest file 
@@ -8,5 +8,7 @@ echo "Packaging version $version"
 # create dist directory if not exist
 [ ! -d ./dist ] && mkdir -p ./dist
 
-# create tar.gz
-tar -czf ./dist/smfc-ds-$version.tar.gz ./src
+# create zip
+# if zip is not installed, install it first
+[ ! -x "$(command -v zip)" ] && sudo apt-get install -y zip
+zip -r ./dist/smfc-ds-$version.zip ./src
