@@ -11,16 +11,14 @@ const dePanel = document.getElementById("de-panel");
 // checkLogin();
 
 let MainData = {};
-setTimeout(() => {
-  const MainDataLocal = localStorage.getItem("MainDataObj");
-  if (MainDataLocal) {
-    MainData = JSON.parse(MainDataLocal);
-    denum.textContent = `${Object.keys(MainData).length} DE`;
+const MainDataLocal = localStorage.getItem("MainDataObj");
+if (MainDataLocal) {
+  MainData = JSON.parse(MainDataLocal);
+  denum.textContent = `${Object.keys(MainData).length} DE`;
 
-    const MainDataObjUpdatetime = localStorage.getItem("MainDataObjUpdatetime");
-    detime.textContent = MainDataObjUpdatetime;
-  }
-}, 1);
+  const MainDataObjUpdatetime = localStorage.getItem("MainDataObjUpdatetime");
+  detime.textContent = MainDataObjUpdatetime;
+}
 
 debutton.addEventListener("click", () => {
   demsg.textContent = "";
@@ -36,25 +34,17 @@ debutton.addEventListener("click", () => {
     const matchList = document.createElement("div");
     matchList.className = "match-list";
 
-    // get matched items by dename max 20
-    const MATCH_LIMIT = 20;
-    let matchCount = 0;
     const matchedItems = [];
     for (let key in MainData) {
       if (key.includes(dename.toLowerCase())) {
         matchedItems.push(MainData[key]);
-        matchCount += 1;
-        if (matchCount >= MATCH_LIMIT) {
-          break;
-        }
       }
     }
 
-    // sort matched items by res.name's length
-    matchedItems.sort((x) => x.name.length);
+    const sortedItems = matchedItems.sort((a, b) => a.name.length - b.name.length);
 
-    for (let i = 0; i < matchedItems.length; i++) {
-      let res = matchedItems[i];
+    for (let i = 0; i < sortedItems.length; i++) {
+      const res = sortedItems[i];
       const matchItem = document.createElement("div");
       matchItem.className = "match-item";
       const matchLink = document.createElement("a");
@@ -70,11 +60,6 @@ debutton.addEventListener("click", () => {
       notFoundItem.className = "not-found-item";
       notFoundItem.textContent = "No matches found";
       matchList.appendChild(notFoundItem);
-    } else if (matchedItems.length >= MATCH_LIMIT) {
-      const overMatchItem = document.createElement("div");
-      overMatchItem.className = "over-match-item";
-      overMatchItem.textContent = `More than ${MATCH_LIMIT} matches, please refine your search`;
-      matchList.appendChild(overMatchItem);
     }
 
     dePanel.appendChild(matchList);
