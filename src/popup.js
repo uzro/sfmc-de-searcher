@@ -7,6 +7,8 @@ const dea = document.getElementById("dea");
 const denum = document.getElementById("denum");
 const detime = document.getElementById("detime");
 const dePanel = document.getElementById("de-panel");
+const inputClear = document.getElementById("inputClear");
+
 
 // checkLogin();
 
@@ -18,7 +20,24 @@ if (MainDataLocal) {
 
   const MainDataObjUpdatetime = localStorage.getItem("MainDataObjUpdatetime");
   detime.textContent = MainDataObjUpdatetime;
+
+  const lastDESearchResultList = localStorage.getItem("lastDESearchResultList");
+  if (lastDESearchResultList) {
+    const lastDESearch = localStorage.getItem("lastDESearch");
+    dename_input.value = lastDESearch;
+    const matchList = createMatchListDom(JSON.parse(lastDESearchResultList), lastDESearch);
+    dePanel.appendChild(matchList);
+  }
 }
+
+
+inputClear.addEventListener("click", () => {
+  dename_input.value = "";
+  demsg.textContent = "";
+  dePanel.innerHTML = "";
+  localStorage.removeItem("lastDESearch");
+  localStorage.removeItem("lastDESearchResultList");
+});
 
 debutton.addEventListener("click", () => {
   demsg.textContent = "";
@@ -31,9 +50,6 @@ debutton.addEventListener("click", () => {
     let urlDomain = urlItem[0];
     let urlServer = getServer(urlDomain);
 
-    const matchList = document.createElement("div");
-    matchList.className = "match-list";
-
     const matchedItems = [];
     for (let key in MainData) {
       if (key.includes(dename.toLowerCase())) {
@@ -42,27 +58,17 @@ debutton.addEventListener("click", () => {
     }
 
     const sortedItems = matchedItems.sort((a, b) => a.name.length - b.name.length);
+    sortedItems.map((item) => {
+      item.href = `https://mc.${urlServer}.marketingcloudapps.com/contactsmeta/admin.html#admin/data-extension/${item.id}`;
+      }
+    );
 
-    for (let i = 0; i < sortedItems.length; i++) {
-      const res = sortedItems[i];
-      const matchItem = document.createElement("div");
-      matchItem.className = "match-item";
-      const matchLink = document.createElement("a");
-      matchLink.target = "_blank";
-      matchLink.href = `https://mc.${urlServer}.marketingcloudapps.com/contactsmeta/admin.html#admin/data-extension/${res.id}`;
-      matchLink.textContent = `${i + 1}. ${res.folder}${res.name}`;
-      matchItem.appendChild(matchLink);
-      matchList.appendChild(matchItem);
+    if (sortedItems.length > 0) {
+      localStorage.setItem("lastDESearch", dename);
+      localStorage.setItem("lastDESearchResultList", JSON.stringify(sortedItems)); 
     }
 
-    if (matchedItems.length === 0) {
-      const notFoundItem = document.createElement("div");
-      notFoundItem.className = "not-found-item";
-      notFoundItem.textContent = "No matches found";
-      matchList.appendChild(notFoundItem);
-    }
-
-    dePanel.appendChild(matchList);
+    dePanel.appendChild(createMatchListDom(sortedItems, dename));
   });
 });
 
@@ -70,6 +76,9 @@ button.addEventListener("click", () => {
   MainData = {};
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const currentTab = tabs[0];
+    if (!currentTab.url) {
+      return;
+    }
     let urlItem = getDomainAndInstanceId(currentTab.url);
     let urlDomain = urlItem[0]; // mc.s*.marketingcloudapps.com
     let urlServer = getServer(urlDomain);
@@ -79,6 +88,9 @@ button.addEventListener("click", () => {
 
     fetch(api)
       .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         return response.json();
       })
       .then(function (data) {
@@ -104,6 +116,45 @@ button.addEventListener("click", () => {
       });
   });
 });
+
+
+function createMatchListDom(items, searchKey) {
+  const matchListDom = document.createElement("div");
+  matchListDom.className = "match-list";
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const matchItem = document.createElement("div");
+    matchItem.className = "match-item";
+    const matchLink = document.createElement("a");
+    matchLink.target = "_blank";
+    matchLink.href = item.href;
+    // highlight search key
+    if (searchKey) {
+      const searchKeyIndex = item.name.toLowerCase().indexOf(searchKey.toLowerCase());
+      if (searchKeyIndex >= 0) {
+        const before = item.name.slice(0, searchKeyIndex);
+        const after = item.name.slice(searchKeyIndex + searchKey.length);
+        const matchedKey = item.name.slice(searchKeyIndex, searchKeyIndex + searchKey.length);
+        matchLink.innerHTML = `${i + 1}. ${item.folder}${before}<span class="highlight-keyword">${matchedKey}</span>${after}`;
+      }
+      console.log('here search', item.name);
+    } else {
+      matchLink.textContent = `${i + 1}. ${item.folder}${item.name}`;
+    }
+
+    matchItem.appendChild(matchLink);
+    matchListDom.appendChild(matchItem);
+  }
+
+  if (items.length === 0) {
+    const noMatchItem = document.createElement("div");
+    noMatchItem.className = "no-match-item";
+    noMatchItem.textContent = "No match found";
+    matchListDom.appendChild(noMatchItem);
+  }
+
+  return matchListDom;
+}
 
 function getDeByFid(fid, server, father) {
   let api = `https://mc.${server}.marketingcloudapps.com/contactsmeta/fuelapi/data-internal/v1/customobjects/category/${fid}?retrievalType=1&$page=1&$pagesize=200&$orderBy=Name%20ASC&`;

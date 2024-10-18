@@ -60,6 +60,17 @@ button {
     background-color: #4096ff;
 }
 
+.btn-warning {
+    color: #fff;
+    background-color: #ff9f00;
+    box-shadow: 0 2px 0 rgba(255, 159, 0, 0.1);
+}
+
+.btn-warning:hover {
+    color: #fff;
+    background-color: #ffbb33;
+}
+
 .btn-default {
     background-color: #fff;
     border-color: #d9d9d9;
@@ -196,6 +207,7 @@ label {
     border: 1px solid #ccc; /* optional styling */
     border-radius: 4px; /* optional styling */
     margin: 5px;
+    word-break: break-all;
 }
 
 .match-item a {
@@ -204,7 +216,7 @@ label {
     height: auto;
 }
 
-.not-found-item {
+.no-match-item {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -220,4 +232,8 @@ label {
     height: 40px;
     font-size: 16px;
     color: green;
+}
+
+.highlight-keyword {
+    color: red;
 }
