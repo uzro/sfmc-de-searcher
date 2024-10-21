@@ -216,7 +216,7 @@ label {
     height: auto;
 }
 
-.no-match-item {
+.no-match-item, .alert-item {
     display: flex;
     justify-content: center;
     align-items: center;

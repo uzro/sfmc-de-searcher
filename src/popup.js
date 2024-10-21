@@ -108,7 +108,7 @@ button.addEventListener("click", () => {
         getChildernByFid(root_id, urlServer, "/");
       }).catch((error) => {
         const needLogingDiv = document.createElement("div");
-        needLogingDiv.className = "not-found-item";
+        needLogingDiv.className = "alert-item";
         needLogingDiv.textContent = "Please Check Your Login Status";
         content.innerHTML = "";
         content.appendChild(needLogingDiv);
@@ -318,7 +318,7 @@ function checkLogin() {
     }
 
     const needLogingDiv = document.createElement("div");
-    needLogingDiv.className = "not-found-item";
+    needLogingDiv.className = "alert-item";
     needLogingDiv.textContent = "Please login to Marketing Cloud first";
 
     if (!_checkStatus()) {
