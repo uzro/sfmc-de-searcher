@@ -95,17 +95,13 @@ button.addEventListener("click", () => {
       })
       .then(function (data) {
         console.log(data);
-        let entry = data.entry;
-        let entry_res = null;
-        for (let item of entry) {
-          if (item.type === "dataextension") {
-            entry_res = item;
-          }
+        for (let item of data.entry) {
+          console.log(item);
+          
+          let root_id = item.id;
+          getDeByFid(root_id, urlServer, "/");
+          getChildernByFid(root_id, urlServer, "/");
         }
-        let root_id = entry_res.id;
-        console.log(entry_res);
-        getDeByFid(root_id, urlServer, "/");
-        getChildernByFid(root_id, urlServer, "/");
       }).catch((error) => {
         const needLogingDiv = document.createElement("div");
         needLogingDiv.className = "alert-item";
