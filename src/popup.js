@@ -109,7 +109,7 @@ button.addEventListener("click", () => {
       }).catch((error) => {
         const needLogingDiv = document.createElement("div");
         needLogingDiv.className = "alert-item";
-        needLogingDiv.textContent = "Please Check Your Login Status";
+        needLogingDiv.textContent = 'Please Landing The "Contact Builder" Page To Refresh Again';
         content.innerHTML = "";
         content.appendChild(needLogingDiv);
         console.log("refresh error", error);
