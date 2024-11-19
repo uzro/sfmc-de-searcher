@@ -8,6 +8,7 @@ const denum = document.getElementById("denum");
 const detime = document.getElementById("detime");
 const dePanel = document.getElementById("de-panel");
 const inputClear = document.getElementById("inputClear");
+const exportASBtn = document.getElementById("exportBtn");
 
 
 // checkLogin();
@@ -30,6 +31,53 @@ if (MainDataLocal) {
   }
 }
 
+exportBtn.addEventListener("click",  () => exportAS());
+  
+async function exportAS() {
+
+  localStorage.setItem("ASData", JSON.stringify([]));
+
+  const FOLDER_ID = "88337";
+
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  const currentTab = tabs[0];
+  if (!currentTab.url) {
+    return;
+  }
+  let urlItem = getDomainAndInstanceId(currentTab.url);
+  let urlDomain = urlItem[0]; // mc.s*.marketingcloudapps.com
+  let urlServer = getServer(urlDomain);
+
+  // trim last one number
+  let ts = new Date().getTime().toString().slice(0, -1);
+  let api = `https://mc.${urlServer}.marketingcloudapps.com/AutomationStudioFuel3/fuelapi/legacy/v1/beta/automations/automation/definition/?$top=25&$skip=0&$sort=lastRunTime%20desc&view=gridView&categoryId=${FOLDER_ID}&_=${ts}`;
+
+  console.log(api);
+
+  const ASData = [];
+
+  let data = await fetch(api);
+  console.log(data);
+  let jsonData = await data.json();
+  for (let item of jsonData.entry) {
+    let as_entity_api = `https://mc.${urlServer}.marketingcloudapps.com/AutomationStudioFuel3/fuelapi/automation/v1/automations/${item.id}?view=targetObjects&_=${ts}`;
+    const itemDetailData = await fetchASData(as_entity_api);
+    ASData.push(itemDetailData);
+  }
+
+  await exportASDatatoJSON(ASData);
+
+  console.log("export done");
+}
+
+async function exportASDatatoJSON(ASData) {
+    // export to json file 
+    const a = document.createElement('a');
+    const file = new Blob([JSON.stringify(ASData)], { type: 'application/json' });
+    a.href = URL.createObjectURL(file);
+    a.download = 'ASData.json';
+    a.click();
+}
 
 inputClear.addEventListener("click", () => {
   dename_input.value = "";
@@ -113,6 +161,15 @@ button.addEventListener("click", () => {
   });
 });
 
+async function fetchASData(url) {
+
+  let data = await fetch(url)
+  if (!data.ok) {
+    throw new Error("Network response was not ok");
+  }
+  console.log(data);
+  return await data.json();
+}
 
 function createMatchListDom(items, searchKey) {
   const matchListDom = document.createElement("div");
